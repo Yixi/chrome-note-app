@@ -1,14 +1,14 @@
 .noteList{
     .item{
-       min-height: 40px;
-
+      min-height: 60px;
+      position: relative;
       .point{
-          height: 40px;
-          width: 3px;
+          height: 100%;
+          width: 2px;
           background-color: #434548;
           float: left;
         margin: 0 25px 0 30px;
-        position: relative;
+        position: absolute;
 
         &:before{
           position: absolute;
@@ -40,9 +40,10 @@
 
 
       .content{
-        color: rgba(255, 255, 255, 0.7);
+        color: rgba(255, 255, 255, 0.5);
         font-weight: 200;
         line-height: 40px;
+        margin-left: 60px;
       }
 
 
