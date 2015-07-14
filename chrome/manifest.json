@@ -1,0 +1,15 @@
+{
+  "name":"Fast Note",
+  "description":"a chrome note app",
+  "version":"0.1",
+  "manifest_version":2,
+  "app":{
+      "background":{
+        "scripts":["bg.js"]
+      }
+  },
+  "icons":{
+    "16":"16.png",
+    "128":"128.png"
+  }
+}
