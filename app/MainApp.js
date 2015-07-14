@@ -3,14 +3,25 @@
  */
 
 'use strict';
+require('./MainApp.less');
 
 import React from 'react';
+
+
+import SideBar from './SideBar.js';
 
 var MainApp  = React.createClass({
 
     render(){
         return (
-            <div>Main</div>
+            <div id="appWrapper">
+                <div id="sideBar">
+                    <SideBar />
+                </div>
+                <div id="mainArea">
+
+                </div>
+            </div>
         )
     }
 });

@@ -1,0 +1,42 @@
+.sideBar{
+    .appTitle{
+      height:60px ;
+      background-color:rgba(37, 206, 152, 1);
+      color:#fff;
+      line-height: 50px;
+      font-weight: 200;
+      font-size: 28px;
+      padding-left: 20px;
+    }
+
+    .notesInfo{
+      color: #fff;
+      height: 36px;
+      line-height: 36px;
+      background-color: rgba(37, 206, 152, 0.7);
+
+      .point{
+        float: left;
+        margin: 10px 25px 0 24px;
+        position: relative;
+        width: 16px;
+        height: 16px;
+        border-radius: 100%;
+        background-color: rgba(36, 122, 93, 1);
+        position: relative;
+        &:after{
+          position: absolute;
+          width: 6px;
+          height: 6px;
+          content: "";
+          background-color: rgba(255, 255, 255, 0.5);
+          border-radius: 100%;
+          left: 50%;
+          margin-left: -3px;
+          top: 50%;
+          margin-top: -3px;
+        }
+      }
+
+    }
+}
