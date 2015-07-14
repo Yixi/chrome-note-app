@@ -18231,6 +18231,10 @@
 
 	var _SideBarJs2 = _interopRequireDefault(_SideBarJs);
 
+	var _DisplayNoteJs = __webpack_require__(174);
+
+	var _DisplayNoteJs2 = _interopRequireDefault(_DisplayNoteJs);
+
 	__webpack_require__(163);
 
 	var MainApp = _react2['default'].createClass({
@@ -18245,7 +18249,11 @@
 	                { id: 'sideBar' },
 	                _react2['default'].createElement(_SideBarJs2['default'], null)
 	            ),
-	            _react2['default'].createElement('div', { id: 'mainArea' })
+	            _react2['default'].createElement(
+	                'div',
+	                { id: 'mainArea' },
+	                _react2['default'].createElement(_DisplayNoteJs2['default'], null)
+	            )
 	        );
 	    }
 	});
@@ -18832,6 +18840,82 @@
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
+
+/***/ },
+/* 172 */,
+/* 173 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Created by Yixi on 7/14/15.
+	 */
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var NoteContent = _react2['default'].createClass({
+	    displayName: 'NoteContent',
+
+	    render: function render() {
+	        return _react2['default'].createElement(
+	            'div',
+	            { className: 'noteContent' },
+	            'Note content'
+	        );
+	    }
+	});
+
+	exports['default'] = NoteContent;
+	module.exports = exports['default'];
+
+/***/ },
+/* 174 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Created by Yixi on 7/14/15.
+	 */
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _NoteContentJs = __webpack_require__(173);
+
+	var _NoteContentJs2 = _interopRequireDefault(_NoteContentJs);
+
+	var DisplayNote = _react2['default'].createClass({
+	    displayName: 'DisplayNote',
+
+	    render: function render() {
+	        return _react2['default'].createElement(
+	            'div',
+	            { className: 'displayNote' },
+	            'note title',
+	            _react2['default'].createElement(_NoteContentJs2['default'], null)
+	        );
+	    }
+	});
+
+	exports['default'] = DisplayNote;
+	module.exports = exports['default'];
 
 /***/ }
 /******/ ]);

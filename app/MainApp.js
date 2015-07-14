@@ -9,6 +9,7 @@ import React from 'react';
 
 
 import SideBar from './SideBar.js';
+import DisplayNote from './DisplayNote.js';
 
 var MainApp  = React.createClass({
 
@@ -19,7 +20,7 @@ var MainApp  = React.createClass({
                     <SideBar />
                 </div>
                 <div id="mainArea">
-
+                    <DisplayNote />
                 </div>
             </div>
         )
