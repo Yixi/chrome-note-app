@@ -67,7 +67,7 @@
 
 	var _appMainAppJs2 = _interopRequireDefault(_appMainAppJs);
 
-	var _appLibsDBJs = __webpack_require__(175);
+	var _appLibsDBJs = __webpack_require__(163);
 
 	var _appLibsDBJs2 = _interopRequireDefault(_appLibsDBJs);
 
@@ -18237,11 +18237,15 @@
 
 	var _SideBarJs2 = _interopRequireDefault(_SideBarJs);
 
-	var _DisplayNoteJs = __webpack_require__(171);
+	var _DisplayNoteJs = __webpack_require__(176);
 
 	var _DisplayNoteJs2 = _interopRequireDefault(_DisplayNoteJs);
 
-	__webpack_require__(173);
+	var _AddButtonJs = __webpack_require__(180);
+
+	var _AddButtonJs2 = _interopRequireDefault(_AddButtonJs);
+
+	__webpack_require__(178);
 
 	var MainApp = _react2['default'].createClass({
 	    displayName: 'MainApp',
@@ -18259,7 +18263,8 @@
 	                'div',
 	                { id: 'mainArea' },
 	                _react2['default'].createElement(_DisplayNoteJs2['default'], null)
-	            )
+	            ),
+	            _react2['default'].createElement(_AddButtonJs2['default'], null)
 	        );
 	    }
 	});
@@ -18291,11 +18296,11 @@
 
 	var _storeNoteStoreJs2 = _interopRequireDefault(_storeNoteStoreJs);
 
-	var _NoteListJs = __webpack_require__(163);
+	var _NoteListJs = __webpack_require__(168);
 
 	var _NoteListJs2 = _interopRequireDefault(_NoteListJs);
 
-	__webpack_require__(169);
+	__webpack_require__(174);
 
 	var getNotes = function getNotes() {
 	    return {
@@ -18371,15 +18376,15 @@
 
 	var _events = __webpack_require__(162);
 
-	var _libsDBJs = __webpack_require__(175);
+	var _libsDBJs = __webpack_require__(163);
 
 	var _libsDBJs2 = _interopRequireDefault(_libsDBJs);
 
-	var _libsNOTEJs = __webpack_require__(176);
+	var _libsNOTEJs = __webpack_require__(164);
 
 	var _libsNOTEJs2 = _interopRequireDefault(_libsNOTEJs);
 
-	var _libsNoteDispatcherJs = __webpack_require__(178);
+	var _libsNoteDispatcherJs = __webpack_require__(166);
 
 	var _libsNoteDispatcherJs2 = _interopRequireDefault(_libsNoteDispatcherJs);
 
@@ -18413,13 +18418,26 @@
 	var Notes = [];
 
 	var loadNotes = function loadNotes() {
-	    _libsDBJs2['default'].getAllNotes().then(function (notes) {});
+	    _libsDBJs2['default'].getAllNotes().then(function (notes) {
+	        Notes = notes;
+	        NoteStore.emitChange();
+	    });
+	};
+
+	var NewNote = function NewNote(note) {
+	    console.log(note);
+	    _libsDBJs2['default'].addNote(note).then(function (note) {
+	        Notes.unshift(note);
+	        NoteStore.emitChange();
+	    });
 	};
 
 	var NoteStore = (0, _objectAssign2['default'])({}, _events.EventEmitter.prototype, {
 
 	    getAllNotes: function getAllNotes() {
-	        if (Notes.length == 0) {}
+	        if (Notes.length == 0) {
+	            loadNotes();
+	        }
 	        return Notes;
 	    },
 
@@ -18438,7 +18456,11 @@
 	});
 
 	NoteStore.dispatchToken = _libsNoteDispatcherJs2['default'].register(function (action) {
-	    switch (action.type) {}
+	    switch (action.type) {
+	        case _libsNOTEJs2['default'].ADD_NEW_EMPTY_NOTE:
+	            NewNote({ title: 'New Note' });
+	            break;
+	    }
 	});
 
 	exports['default'] = NoteStore;
@@ -18757,226 +18779,6 @@
 
 /***/ },
 /* 163 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * Created by Yixi on 7/14/15.
-	 */
-
-	'use strict';
-
-	Object.defineProperty(exports, '__esModule', {
-	    value: true
-	});
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-	var _react = __webpack_require__(2);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _classnames = __webpack_require__(164);
-
-	var _classnames2 = _interopRequireDefault(_classnames);
-
-	var _storeNoteStoreJs = __webpack_require__(160);
-
-	var _storeNoteStoreJs2 = _interopRequireDefault(_storeNoteStoreJs);
-
-	__webpack_require__(165);
-
-	var NoteList = _react2['default'].createClass({
-	    displayName: 'NoteList',
-
-	    render: function render() {
-
-	        var _list = function _list(item, i) {
-
-	            var itemClass = (0, _classnames2['default'])({
-	                'item': true,
-	                'active': i == 1
-	            });
-
-	            return _react2['default'].createElement(
-	                'div',
-	                { className: itemClass, key: i },
-	                _react2['default'].createElement('div', { className: 'point' }),
-	                _react2['default'].createElement(
-	                    'div',
-	                    { className: 'content' },
-	                    _react2['default'].createElement(
-	                        'div',
-	                        { className: 'header' },
-	                        item.title
-	                    )
-	                )
-	            );
-	        };
-
-	        return _react2['default'].createElement(
-	            'div',
-	            { className: 'noteList' },
-	            this.props.notes.map(_list)
-	        );
-	    }
-	});
-
-	exports['default'] = NoteList;
-	module.exports = exports['default'];
-
-/***/ },
-/* 164 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __WEBPACK_AMD_DEFINE_RESULT__;/*!
-	  Copyright (c) 2015 Jed Watson.
-	  Licensed under the MIT License (MIT), see
-	  http://jedwatson.github.io/classnames
-	*/
-
-	'use strict';
-
-	(function () {
-		'use strict';
-
-		function classNames() {
-
-			var classes = '';
-
-			for (var i = 0; i < arguments.length; i++) {
-				var arg = arguments[i];
-				if (!arg) continue;
-
-				var argType = typeof arg;
-
-				if ('string' === argType || 'number' === argType) {
-					classes += ' ' + arg;
-				} else if (Array.isArray(arg)) {
-					classes += ' ' + classNames.apply(null, arg);
-				} else if ('object' === argType) {
-					for (var key in arg) {
-						if (arg.hasOwnProperty(key) && arg[key]) {
-							classes += ' ' + key;
-						}
-					}
-				}
-			}
-
-			return classes.substr(1);
-		}
-
-		if (typeof module !== 'undefined' && module.exports) {
-			module.exports = classNames;
-		} else if (true) {
-			// AMD. Register as an anonymous module.
-			!(__WEBPACK_AMD_DEFINE_RESULT__ = function () {
-				return classNames;
-			}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-		} else {
-			window.classNames = classNames;
-		}
-	})();
-
-/***/ },
-/* 165 */
-/***/ function(module, exports) {
-
-	// removed by extract-text-webpack-plugin
-
-/***/ },
-/* 166 */,
-/* 167 */,
-/* 168 */,
-/* 169 */
-/***/ function(module, exports) {
-
-	// removed by extract-text-webpack-plugin
-
-/***/ },
-/* 170 */,
-/* 171 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * Created by Yixi on 7/14/15.
-	 */
-
-	'use strict';
-
-	Object.defineProperty(exports, '__esModule', {
-	    value: true
-	});
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-	var _react = __webpack_require__(2);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _NoteContentJs = __webpack_require__(172);
-
-	var _NoteContentJs2 = _interopRequireDefault(_NoteContentJs);
-
-	var DisplayNote = _react2['default'].createClass({
-	    displayName: 'DisplayNote',
-
-	    render: function render() {
-	        return _react2['default'].createElement(
-	            'div',
-	            { className: 'displayNote' },
-	            'note title',
-	            _react2['default'].createElement(_NoteContentJs2['default'], null)
-	        );
-	    }
-	});
-
-	exports['default'] = DisplayNote;
-	module.exports = exports['default'];
-
-/***/ },
-/* 172 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * Created by Yixi on 7/14/15.
-	 */
-
-	'use strict';
-
-	Object.defineProperty(exports, '__esModule', {
-	    value: true
-	});
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-	var _react = __webpack_require__(2);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var NoteContent = _react2['default'].createClass({
-	    displayName: 'NoteContent',
-
-	    render: function render() {
-	        return _react2['default'].createElement(
-	            'div',
-	            { className: 'noteContent' },
-	            'Note content'
-	        );
-	    }
-	});
-
-	exports['default'] = NoteContent;
-	module.exports = exports['default'];
-
-/***/ },
-/* 173 */
-/***/ function(module, exports) {
-
-	// removed by extract-text-webpack-plugin
-
-/***/ },
-/* 174 */,
-/* 175 */
 /***/ function(module, exports) {
 
 	/**
@@ -19051,8 +18853,10 @@
 	            user_id: 0
 	        });
 
-	        request.onsucess = function (event) {
-	            resolve(event.target.result);
+	        request.onsuccess = function (event) {
+	            getNote(event.target.result).then(function (note) {
+	                resolve(note);
+	            });
 	        };
 
 	        request.onerror = function (error) {
@@ -19081,6 +18885,21 @@
 	    });
 	};
 
+	var getNote = function getNote(id) {
+	    return new Promise(function (resolve, reject) {
+	        var request = getObjectStore('notes', 0).get(id);
+
+	        request.onsuccess = function (event) {
+	            resolve(event.target.result);
+	        };
+
+	        request.onerror = function (error) {
+	            console.error('get note ' + id + ' error');
+	            reject(error.message);
+	        };
+	    });
+	};
+
 	exports['default'] = {
 	    init: init,
 	    addNote: addNote,
@@ -19089,7 +18908,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 176 */
+/* 164 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -19104,7 +18923,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _keymirror = __webpack_require__(177);
+	var _keymirror = __webpack_require__(165);
 
 	var _keymirror2 = _interopRequireDefault(_keymirror);
 
@@ -19113,12 +18932,14 @@
 	var _objectAssign2 = _interopRequireDefault(_objectAssign);
 
 	exports['default'] = (0, _objectAssign2['default'])({}, {}, (0, _keymirror2['default'])({
-	    NOTE_STORE_CHANGE: null
+	    NOTE_STORE_CHANGE: null,
+
+	    ADD_NEW_EMPTY_NOTE: null
 	}));
 	module.exports = exports['default'];
 
 /***/ },
-/* 177 */
+/* 165 */
 /***/ function(module, exports) {
 
 	/**
@@ -19176,7 +18997,7 @@
 	module.exports = keyMirror;
 
 /***/ },
-/* 178 */
+/* 166 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -19191,7 +19012,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _DispatcherJs = __webpack_require__(179);
+	var _DispatcherJs = __webpack_require__(167);
 
 	var _DispatcherJs2 = _interopRequireDefault(_DispatcherJs);
 
@@ -19199,7 +19020,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 179 */
+/* 167 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -19373,6 +19194,310 @@
 	})();
 
 	exports['default'] = Dispatcher;
+	module.exports = exports['default'];
+
+/***/ },
+/* 168 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Created by Yixi on 7/14/15.
+	 */
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _classnames = __webpack_require__(169);
+
+	var _classnames2 = _interopRequireDefault(_classnames);
+
+	var _storeNoteStoreJs = __webpack_require__(160);
+
+	var _storeNoteStoreJs2 = _interopRequireDefault(_storeNoteStoreJs);
+
+	__webpack_require__(170);
+
+	var NoteList = _react2['default'].createClass({
+	    displayName: 'NoteList',
+
+	    render: function render() {
+
+	        var _list = function _list(item, i) {
+
+	            var itemClass = (0, _classnames2['default'])({
+	                'item': true,
+	                'active': i == 1
+	            });
+
+	            return _react2['default'].createElement(
+	                'div',
+	                { className: itemClass, key: i },
+	                _react2['default'].createElement('div', { className: 'point' }),
+	                _react2['default'].createElement(
+	                    'div',
+	                    { className: 'content' },
+	                    _react2['default'].createElement(
+	                        'div',
+	                        { className: 'header' },
+	                        item.title
+	                    )
+	                )
+	            );
+	        };
+
+	        return _react2['default'].createElement(
+	            'div',
+	            { className: 'noteList' },
+	            this.props.notes.map(_list)
+	        );
+	    }
+	});
+
+	exports['default'] = NoteList;
+	module.exports = exports['default'];
+
+/***/ },
+/* 169 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_RESULT__;/*!
+	  Copyright (c) 2015 Jed Watson.
+	  Licensed under the MIT License (MIT), see
+	  http://jedwatson.github.io/classnames
+	*/
+
+	'use strict';
+
+	(function () {
+		'use strict';
+
+		function classNames() {
+
+			var classes = '';
+
+			for (var i = 0; i < arguments.length; i++) {
+				var arg = arguments[i];
+				if (!arg) continue;
+
+				var argType = typeof arg;
+
+				if ('string' === argType || 'number' === argType) {
+					classes += ' ' + arg;
+				} else if (Array.isArray(arg)) {
+					classes += ' ' + classNames.apply(null, arg);
+				} else if ('object' === argType) {
+					for (var key in arg) {
+						if (arg.hasOwnProperty(key) && arg[key]) {
+							classes += ' ' + key;
+						}
+					}
+				}
+			}
+
+			return classes.substr(1);
+		}
+
+		if (typeof module !== 'undefined' && module.exports) {
+			module.exports = classNames;
+		} else if (true) {
+			// AMD. Register as an anonymous module.
+			!(__WEBPACK_AMD_DEFINE_RESULT__ = function () {
+				return classNames;
+			}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+		} else {
+			window.classNames = classNames;
+		}
+	})();
+
+/***/ },
+/* 170 */
+/***/ function(module, exports) {
+
+	// removed by extract-text-webpack-plugin
+
+/***/ },
+/* 171 */,
+/* 172 */,
+/* 173 */,
+/* 174 */
+/***/ function(module, exports) {
+
+	// removed by extract-text-webpack-plugin
+
+/***/ },
+/* 175 */,
+/* 176 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Created by Yixi on 7/14/15.
+	 */
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _NoteContentJs = __webpack_require__(177);
+
+	var _NoteContentJs2 = _interopRequireDefault(_NoteContentJs);
+
+	var DisplayNote = _react2['default'].createClass({
+	    displayName: 'DisplayNote',
+
+	    render: function render() {
+	        return _react2['default'].createElement(
+	            'div',
+	            { className: 'displayNote' },
+	            'note title',
+	            _react2['default'].createElement(_NoteContentJs2['default'], null)
+	        );
+	    }
+	});
+
+	exports['default'] = DisplayNote;
+	module.exports = exports['default'];
+
+/***/ },
+/* 177 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Created by Yixi on 7/14/15.
+	 */
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var NoteContent = _react2['default'].createClass({
+	    displayName: 'NoteContent',
+
+	    render: function render() {
+	        return _react2['default'].createElement(
+	            'div',
+	            { className: 'noteContent' },
+	            'Note content'
+	        );
+	    }
+	});
+
+	exports['default'] = NoteContent;
+	module.exports = exports['default'];
+
+/***/ },
+/* 178 */
+/***/ function(module, exports) {
+
+	// removed by extract-text-webpack-plugin
+
+/***/ },
+/* 179 */,
+/* 180 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Created by liuyixi on 7/15/15.
+	 */
+
+	'use strict';
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _libsNoteActionCreatorsJs = __webpack_require__(183);
+
+	var _libsNoteActionCreatorsJs2 = _interopRequireDefault(_libsNoteActionCreatorsJs);
+
+	__webpack_require__(181);
+
+	var AddButton = _react2['default'].createClass({
+	    displayName: 'AddButton',
+
+	    _onClick: function _onClick() {
+	        _libsNoteActionCreatorsJs2['default'].AddNewNote();
+	    },
+
+	    render: function render() {
+	        return _react2['default'].createElement(
+	            'div',
+	            { id: 'AddButton', onClick: this._onClick },
+	            _react2['default'].createElement('i', { className: 'plus icon' })
+	        );
+	    }
+	});
+
+	exports['default'] = AddButton;
+	module.exports = exports['default'];
+
+/***/ },
+/* 181 */
+/***/ function(module, exports) {
+
+	// removed by extract-text-webpack-plugin
+
+/***/ },
+/* 182 */,
+/* 183 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Created by Yixi on 7/15/15.
+	 */
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	var _NoteDispatcherJs = __webpack_require__(166);
+
+	var _NoteDispatcherJs2 = _interopRequireDefault(_NoteDispatcherJs);
+
+	var _NOTEJs = __webpack_require__(164);
+
+	var _NOTEJs2 = _interopRequireDefault(_NOTEJs);
+
+	exports['default'] = {
+	    AddNewNote: function AddNewNote() {
+	        _NoteDispatcherJs2['default'].dispatch({
+	            type: _NOTEJs2['default'].ADD_NEW_EMPTY_NOTE
+	        });
+	    }
+	};
 	module.exports = exports['default'];
 
 /***/ }

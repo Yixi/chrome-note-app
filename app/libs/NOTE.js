@@ -11,5 +11,7 @@ export default assign({},
     {
 
     },keyMirror({
-        NOTE_STORE_CHANGE:null
+        NOTE_STORE_CHANGE:null,
+
+        ADD_NEW_EMPTY_NOTE:null
     }));

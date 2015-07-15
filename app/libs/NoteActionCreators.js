@@ -9,5 +9,9 @@ import NOTE from './NOTE.js';
 
 
 export default {
-
+    AddNewNote(){
+        NoteDispatcher.dispatch({
+            type:NOTE.ADD_NEW_EMPTY_NOTE
+        })
+    }
 };

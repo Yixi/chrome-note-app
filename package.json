@@ -6,6 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "loadapp": "/Applications/Google\\ Chrome.app/Contents/MacOS/Google\\ Chrome --load-and-launch-app=/Volumes/Files/Extension/chrome/chrome-note-app/chrome",
+    "loadapphome":"/Applications/Google\\ Chrome.app/Contents/MacOS/Google\\ Chrome --load-and-launch-app=/Users/liuyixi/Sites/crx-chrome/chrome-note-app/chrome",
     "packjs": "./node_modules/.bin/webpack --progress --colors --watch"
   },
   "repository": {

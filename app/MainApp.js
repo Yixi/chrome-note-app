@@ -10,6 +10,7 @@ import React from 'react';
 
 import SideBar from './SideBar.js';
 import DisplayNote from './DisplayNote.js';
+import AddButton from './AddButton.js';
 
 var MainApp  = React.createClass({
 
@@ -22,6 +23,7 @@ var MainApp  = React.createClass({
                 <div id="mainArea">
                     <DisplayNote />
                 </div>
+                <AddButton />
             </div>
         )
     }

@@ -68,8 +68,12 @@ var addNote = (note) => {
             user_id:0
         });
 
-        request.onsucess = (event) => {
-            resolve(event.target.result);
+        request.onsuccess = (event) => {
+            getNote(event.target.result).then(
+                (note)=>{
+                    resolve(note);
+                }
+            )
         };
 
         request.onerror = (error) => {
@@ -100,6 +104,20 @@ var getAllNotes = () => {
     });
 };
 
+var getNote = (id) => {
+    return new Promise( (resolve,reject) => {
+        var request = getObjectStore('notes',0).get(id);
+
+        request.onsuccess = (event) => {
+            resolve(event.target.result);
+        };
+
+        request.onerror = (error) => {
+            console.error('get note '+ id + ' error');
+            reject(error.message);
+        }
+    });
+};
 
 export default {
     init:init,

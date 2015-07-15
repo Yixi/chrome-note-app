@@ -44,16 +44,26 @@ var Notes = [];
 
 var loadNotes = () => {
     DB.getAllNotes().then( (notes) => {
-
+        Notes = notes;
+        NoteStore.emitChange();
     });
 };
+
+var NewNote = (note) => {
+    console.log(note);
+    DB.addNote(note).then( (note) => {
+        Notes.unshift(note);
+        NoteStore.emitChange();
+    });
+};
+
 
 
 var NoteStore = objectAssign({},EventEmitter.prototype,{
 
     getAllNotes(){
         if(Notes.length == 0){
-
+            loadNotes();
         }
         return Notes;
     },
@@ -74,7 +84,9 @@ var NoteStore = objectAssign({},EventEmitter.prototype,{
 
 NoteStore.dispatchToken = NoteDispatcher.register( (action) => {
     switch (action.type){
-
+        case NOTE.ADD_NEW_EMPTY_NOTE:
+            NewNote({title:'New Note'});
+            break;
     }
 });
 
