@@ -13,17 +13,21 @@ import NoteStore from './store/NoteStore.js';
 
 var NoteList = React.createClass({
 
+    _onSelect(){
+
+    },
+
     render(){
 
         var _list = (item,i) => {
 
             var itemClass = cx({
                 "item":true,
-                "active":i == 1
+                "active":item.id == this.props.focusId
             });
 
             return (
-                <div className={itemClass} key={i}>
+                <div className={itemClass} key={i} onClick={this.props.onNoteSelectChange.bind(null,item.id)}>
                     <div className="point"></div>
                     <div className="content">
                         <div className="header">{item.title}</div>

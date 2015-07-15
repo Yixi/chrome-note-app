@@ -14,14 +14,25 @@ import AddButton from './AddButton.js';
 
 var MainApp  = React.createClass({
 
+    getInitialState(){
+        return {
+            selectNoteId:null
+        }
+    },
+
+    _onNoteSelectChange(id){
+        console.log(id);
+        this.setState({selectNoteId:id});
+    },
+
     render(){
         return (
             <div id="appWrapper">
                 <div id="sideBar">
-                    <SideBar />
+                    <SideBar onNoteSelectChange={this._onNoteSelectChange} focusId={this.state.selectNoteId}/>
                 </div>
                 <div id="mainArea">
-                    <DisplayNote />
+                    <DisplayNote focusId={this.state.selectNoteId}/>
                 </div>
                 <AddButton />
             </div>

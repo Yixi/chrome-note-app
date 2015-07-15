@@ -38,6 +38,9 @@ var SideBar  = React.createClass({
         this.setState(getNotes());
     },
 
+    _onNoteSelectChange(id){
+        console.log(id);
+    },
 
     render(){
         return (
@@ -49,7 +52,7 @@ var SideBar  = React.createClass({
                         {this.state.notes.length + " " + "Notes"}
                     </div>
                 </div>
-                <NoteList notes={this.state.notes}/>
+                <NoteList notes={this.state.notes} {...this.props}/>
             </div>
         )
     }

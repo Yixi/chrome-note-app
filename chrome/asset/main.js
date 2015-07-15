@@ -18250,6 +18250,17 @@
 	var MainApp = _react2['default'].createClass({
 	    displayName: 'MainApp',
 
+	    getInitialState: function getInitialState() {
+	        return {
+	            selectNoteId: null
+	        };
+	    },
+
+	    _onNoteSelectChange: function _onNoteSelectChange(id) {
+	        console.log(id);
+	        this.setState({ selectNoteId: id });
+	    },
+
 	    render: function render() {
 	        return _react2['default'].createElement(
 	            'div',
@@ -18257,12 +18268,12 @@
 	            _react2['default'].createElement(
 	                'div',
 	                { id: 'sideBar' },
-	                _react2['default'].createElement(_SideBarJs2['default'], null)
+	                _react2['default'].createElement(_SideBarJs2['default'], { onNoteSelectChange: this._onNoteSelectChange, focusId: this.state.selectNoteId })
 	            ),
 	            _react2['default'].createElement(
 	                'div',
 	                { id: 'mainArea' },
-	                _react2['default'].createElement(_DisplayNoteJs2['default'], null)
+	                _react2['default'].createElement(_DisplayNoteJs2['default'], { focusId: this.state.selectNoteId })
 	            ),
 	            _react2['default'].createElement(_AddButtonJs2['default'], null)
 	        );
@@ -18285,6 +18296,8 @@
 	Object.defineProperty(exports, '__esModule', {
 	    value: true
 	});
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
@@ -18327,6 +18340,10 @@
 	        this.setState(getNotes());
 	    },
 
+	    _onNoteSelectChange: function _onNoteSelectChange(id) {
+	        console.log(id);
+	    },
+
 	    render: function render() {
 	        return _react2['default'].createElement(
 	            'div',
@@ -18346,7 +18363,7 @@
 	                    this.state.notes.length + ' ' + 'Notes'
 	                )
 	            ),
-	            _react2['default'].createElement(_NoteListJs2['default'], { notes: this.state.notes })
+	            _react2['default'].createElement(_NoteListJs2['default'], _extends({ notes: this.state.notes }, this.props))
 	        );
 	    }
 	});
@@ -19229,18 +19246,21 @@
 	var NoteList = _react2['default'].createClass({
 	    displayName: 'NoteList',
 
+	    _onSelect: function _onSelect() {},
+
 	    render: function render() {
+	        var _this = this;
 
 	        var _list = function _list(item, i) {
 
 	            var itemClass = (0, _classnames2['default'])({
 	                'item': true,
-	                'active': i == 1
+	                'active': item.id == _this.props.focusId
 	            });
 
 	            return _react2['default'].createElement(
 	                'div',
-	                { className: itemClass, key: i },
+	                { className: itemClass, key: i, onClick: _this.props.onNoteSelectChange.bind(null, item.id) },
 	                _react2['default'].createElement('div', { className: 'point' }),
 	                _react2['default'].createElement(
 	                    'div',
