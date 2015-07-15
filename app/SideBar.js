@@ -12,12 +12,30 @@ import NoteStore from './store/NoteStore.js';
 
 import NoteList from './NoteList.js';
 
+
+var getNotes = () => {
+    return {
+        notes:NoteStore.getAllNotes()
+    }
+};
+
 var SideBar  = React.createClass({
 
     getInitialState(){
-        return {
-            notes:NoteStore.getAllNotes()
-        }
+        return getNotes();
+    },
+
+    componentDidMount(){
+        NoteStore.addChangeListener(this._onNotesChange);
+    },
+
+    componentWillUnmount(){
+        NoteStore.removeChangeListener(this._onNotesChange);
+    },
+
+
+    _onNotesChange(){
+        this.setState(getNotes());
     },
 
 

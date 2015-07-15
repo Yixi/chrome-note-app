@@ -13,16 +13,6 @@ import NoteStore from './store/NoteStore.js';
 
 var NoteList = React.createClass({
 
-
-    getInitialState(){
-        return {
-            notes:NoteStore.getAllNotes()
-        }
-    },
-
-
-
-
     render(){
 
         var _list = (item,i) => {

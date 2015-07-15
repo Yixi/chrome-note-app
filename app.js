@@ -8,5 +8,9 @@ import React from 'react';
 
 import MainApp from './app/MainApp.js';
 
+import DB from './app/libs/DB.js';
 
-React.render(<MainApp />,document.getElementById('_mainRender'));
+DB.init().then(()=>{
+    React.render(<MainApp />,document.getElementById('_mainRender'));
+});
+

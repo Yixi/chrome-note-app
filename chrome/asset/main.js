@@ -67,7 +67,13 @@
 
 	var _appMainAppJs2 = _interopRequireDefault(_appMainAppJs);
 
-	_react2['default'].render(_react2['default'].createElement(_appMainAppJs2['default'], null), document.getElementById('_mainRender'));
+	var _appLibsDBJs = __webpack_require__(175);
+
+	var _appLibsDBJs2 = _interopRequireDefault(_appLibsDBJs);
+
+	_appLibsDBJs2['default'].init().then(function () {
+	  _react2['default'].render(_react2['default'].createElement(_appMainAppJs2['default'], null), document.getElementById('_mainRender'));
+	});
 
 /***/ },
 /* 2 */
@@ -18227,15 +18233,15 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _SideBarJs = __webpack_require__(170);
+	var _SideBarJs = __webpack_require__(159);
 
 	var _SideBarJs2 = _interopRequireDefault(_SideBarJs);
 
-	var _DisplayNoteJs = __webpack_require__(174);
+	var _DisplayNoteJs = __webpack_require__(171);
 
 	var _DisplayNoteJs2 = _interopRequireDefault(_DisplayNoteJs);
 
-	__webpack_require__(163);
+	__webpack_require__(173);
 
 	var MainApp = _react2['default'].createClass({
 	    displayName: 'MainApp',
@@ -18281,59 +18287,66 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _classnames = __webpack_require__(169);
-
-	var _classnames2 = _interopRequireDefault(_classnames);
-
 	var _storeNoteStoreJs = __webpack_require__(160);
 
 	var _storeNoteStoreJs2 = _interopRequireDefault(_storeNoteStoreJs);
 
-	__webpack_require__(167);
+	var _NoteListJs = __webpack_require__(163);
 
-	var NoteList = _react2['default'].createClass({
-	    displayName: 'NoteList',
+	var _NoteListJs2 = _interopRequireDefault(_NoteListJs);
+
+	__webpack_require__(169);
+
+	var getNotes = function getNotes() {
+	    return {
+	        notes: _storeNoteStoreJs2['default'].getAllNotes()
+	    };
+	};
+
+	var SideBar = _react2['default'].createClass({
+	    displayName: 'SideBar',
 
 	    getInitialState: function getInitialState() {
-	        return {
-	            notes: _storeNoteStoreJs2['default'].getAllNotes()
-	        };
+	        return getNotes();
+	    },
+
+	    componentDidMount: function componentDidMount() {
+	        _storeNoteStoreJs2['default'].addChangeListener(this._onNotesChange);
+	    },
+
+	    componentWillUnmount: function componentWillUnmount() {
+	        _storeNoteStoreJs2['default'].removeChangeListener(this._onNotesChange);
+	    },
+
+	    _onNotesChange: function _onNotesChange() {
+	        this.setState(getNotes());
 	    },
 
 	    render: function render() {
-
-	        var _list = function _list(item, i) {
-
-	            var itemClass = (0, _classnames2['default'])({
-	                'item': true,
-	                'active': i == 1
-	            });
-
-	            return _react2['default'].createElement(
+	        return _react2['default'].createElement(
+	            'div',
+	            { className: 'sideBar' },
+	            _react2['default'].createElement(
 	                'div',
-	                { className: itemClass, key: i },
+	                { className: 'appTitle' },
+	                'Fast Note'
+	            ),
+	            _react2['default'].createElement(
+	                'div',
+	                { className: 'notesInfo' },
 	                _react2['default'].createElement('div', { className: 'point' }),
 	                _react2['default'].createElement(
 	                    'div',
-	                    { className: 'content' },
-	                    _react2['default'].createElement(
-	                        'div',
-	                        { className: 'header' },
-	                        item.title
-	                    )
+	                    { className: 'info' },
+	                    this.state.notes.length + ' ' + 'Notes'
 	                )
-	            );
-	        };
-
-	        return _react2['default'].createElement(
-	            'div',
-	            { className: 'noteList' },
-	            this.props.notes.map(_list)
+	            ),
+	            _react2['default'].createElement(_NoteListJs2['default'], { notes: this.state.notes })
 	        );
 	    }
 	});
 
-	exports['default'] = NoteList;
+	exports['default'] = SideBar;
 	module.exports = exports['default'];
 
 /***/ },
@@ -18358,32 +18371,74 @@
 
 	var _events = __webpack_require__(162);
 
-	var Notes = [{
-	    'title': 'test note 1',
-	    'content': 'this is a test note'
-	}, {
-	    'title': 'test note 2',
-	    'content': 'this is a test note'
-	}, {
-	    'title': 'test note 3',
-	    'content': 'this is a test note'
-	}, {
-	    'title': 'test note 4',
-	    'content': 'this is a test note'
-	}, {
-	    'title': 'test note 5',
-	    'content': 'this is a test note'
-	}, {
-	    'title': 'test note 6',
-	    'content': 'this is a test note'
-	}];
+	var _libsDBJs = __webpack_require__(175);
+
+	var _libsDBJs2 = _interopRequireDefault(_libsDBJs);
+
+	var _libsNOTEJs = __webpack_require__(176);
+
+	var _libsNOTEJs2 = _interopRequireDefault(_libsNOTEJs);
+
+	var _libsNoteDispatcherJs = __webpack_require__(178);
+
+	var _libsNoteDispatcherJs2 = _interopRequireDefault(_libsNoteDispatcherJs);
+
+	//var Notes = [
+	//    {
+	//        "title":"test note 1",
+	//        "content":"this is a test note"
+	//    },
+	//    {
+	//        "title":"test note 2",
+	//        "content":"this is a test note"
+	//    },
+	//    {
+	//        "title":"test note 3",
+	//        "content":"this is a test note"
+	//    },
+	//    {
+	//        "title":"test note 4",
+	//        "content":"this is a test note"
+	//    },
+	//    {
+	//        "title":"test note 5",
+	//        "content":"this is a test note"
+	//    },{
+	//        "title":"test note 6",
+	//        "content":"this is a test note"
+	//    }
+	//
+	//];
+
+	var Notes = [];
+
+	var loadNotes = function loadNotes() {
+	    _libsDBJs2['default'].getAllNotes().then(function (notes) {});
+	};
 
 	var NoteStore = (0, _objectAssign2['default'])({}, _events.EventEmitter.prototype, {
 
 	    getAllNotes: function getAllNotes() {
+	        if (Notes.length == 0) {}
 	        return Notes;
+	    },
+
+	    emitChange: function emitChange() {
+	        this.emit(_libsNOTEJs2['default'].NOTE_STORE_CHANGE);
+	    },
+
+	    addChangeListener: function addChangeListener(callback) {
+	        this.on(_libsNOTEJs2['default'].NOTE_STORE_CHANGE, callback);
+	    },
+
+	    removeChangeListener: function removeChangeListener(callback) {
+	        this.removeChangeListener(_libsNOTEJs2['default'].NOTE_STORE_CHANGE, callback);
 	    }
 
+	});
+
+	NoteStore.dispatchToken = _libsNoteDispatcherJs2['default'].register(function (action) {
+	    switch (action.type) {}
 	});
 
 	exports['default'] = NoteStore;
@@ -18702,22 +18757,75 @@
 
 /***/ },
 /* 163 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-	// removed by extract-text-webpack-plugin
+	/**
+	 * Created by Yixi on 7/14/15.
+	 */
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _classnames = __webpack_require__(164);
+
+	var _classnames2 = _interopRequireDefault(_classnames);
+
+	var _storeNoteStoreJs = __webpack_require__(160);
+
+	var _storeNoteStoreJs2 = _interopRequireDefault(_storeNoteStoreJs);
+
+	__webpack_require__(165);
+
+	var NoteList = _react2['default'].createClass({
+	    displayName: 'NoteList',
+
+	    render: function render() {
+
+	        var _list = function _list(item, i) {
+
+	            var itemClass = (0, _classnames2['default'])({
+	                'item': true,
+	                'active': i == 1
+	            });
+
+	            return _react2['default'].createElement(
+	                'div',
+	                { className: itemClass, key: i },
+	                _react2['default'].createElement('div', { className: 'point' }),
+	                _react2['default'].createElement(
+	                    'div',
+	                    { className: 'content' },
+	                    _react2['default'].createElement(
+	                        'div',
+	                        { className: 'header' },
+	                        item.title
+	                    )
+	                )
+	            );
+	        };
+
+	        return _react2['default'].createElement(
+	            'div',
+	            { className: 'noteList' },
+	            this.props.notes.map(_list)
+	        );
+	    }
+	});
+
+	exports['default'] = NoteList;
+	module.exports = exports['default'];
 
 /***/ },
-/* 164 */,
-/* 165 */,
-/* 166 */,
-/* 167 */
-/***/ function(module, exports) {
-
-	// removed by extract-text-webpack-plugin
-
-/***/ },
-/* 168 */,
-/* 169 */
+/* 164 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -18770,7 +18878,23 @@
 	})();
 
 /***/ },
-/* 170 */
+/* 165 */
+/***/ function(module, exports) {
+
+	// removed by extract-text-webpack-plugin
+
+/***/ },
+/* 166 */,
+/* 167 */,
+/* 168 */,
+/* 169 */
+/***/ function(module, exports) {
+
+	// removed by extract-text-webpack-plugin
+
+/***/ },
+/* 170 */,
+/* 171 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -18789,61 +18913,28 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _storeNoteStoreJs = __webpack_require__(160);
+	var _NoteContentJs = __webpack_require__(172);
 
-	var _storeNoteStoreJs2 = _interopRequireDefault(_storeNoteStoreJs);
+	var _NoteContentJs2 = _interopRequireDefault(_NoteContentJs);
 
-	var _NoteListJs = __webpack_require__(159);
-
-	var _NoteListJs2 = _interopRequireDefault(_NoteListJs);
-
-	__webpack_require__(171);
-
-	var SideBar = _react2['default'].createClass({
-	    displayName: 'SideBar',
-
-	    getInitialState: function getInitialState() {
-	        return {
-	            notes: _storeNoteStoreJs2['default'].getAllNotes()
-	        };
-	    },
+	var DisplayNote = _react2['default'].createClass({
+	    displayName: 'DisplayNote',
 
 	    render: function render() {
 	        return _react2['default'].createElement(
 	            'div',
-	            { className: 'sideBar' },
-	            _react2['default'].createElement(
-	                'div',
-	                { className: 'appTitle' },
-	                'Fast Note'
-	            ),
-	            _react2['default'].createElement(
-	                'div',
-	                { className: 'notesInfo' },
-	                _react2['default'].createElement('div', { className: 'point' }),
-	                _react2['default'].createElement(
-	                    'div',
-	                    { className: 'info' },
-	                    this.state.notes.length + ' ' + 'Notes'
-	                )
-	            ),
-	            _react2['default'].createElement(_NoteListJs2['default'], { notes: this.state.notes })
+	            { className: 'displayNote' },
+	            'note title',
+	            _react2['default'].createElement(_NoteContentJs2['default'], null)
 	        );
 	    }
 	});
 
-	exports['default'] = SideBar;
+	exports['default'] = DisplayNote;
 	module.exports = exports['default'];
 
 /***/ },
-/* 171 */
-/***/ function(module, exports) {
-
-	// removed by extract-text-webpack-plugin
-
-/***/ },
-/* 172 */,
-/* 173 */
+/* 172 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -18878,11 +18969,131 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 174 */
+/* 173 */
+/***/ function(module, exports) {
+
+	// removed by extract-text-webpack-plugin
+
+/***/ },
+/* 174 */,
+/* 175 */
+/***/ function(module, exports) {
+
+	/**
+	 * Created by Yixi on 7/15/15.
+	 */
+	/*
+	 Data format:
+	 -"notes":
+	 |------   |-------|----------|-------|-------|--------|----- |--------|-----------|-----------|----------|
+	 |   id   |  title |  content |  url  |  list |  topic |  tag |  color |   created |   updated |  user_id |
+	 |------- |--------|----------|-------|-------|--------|------|--------|-----------|-----------|----------|
+
+	 */
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+	var DB;
+
+	var getObjectStore = function getObjectStore(name, mode) {
+	    return DB.transaction([name], mode == 1 ? 'readwrite' : 'readonly').objectStore(name);
+	};
+
+	var openDataBase = function openDataBase() {
+	    return new Promise(function (resolve, reject) {
+	        var request = window.indexedDB.open('FastNote', 1);
+	        request.onerror = function (event) {
+	            reject('open data base error');
+	        };
+
+	        request.onupgradeneeded = function (event) {
+	            DB = event.target.result;
+	            if (!DB.objectStoreNames.contains('notes')) {
+	                var store = DB.createObjectStore('notes', { keyPath: 'id', autoIncrement: true });
+	                store.createIndex('updated', 'updated', { unique: false });
+	            }
+	        };
+
+	        request.onsuccess = function (event) {
+	            DB = event.target.result;
+	            resolve();
+	        };
+	    });
+	};
+
+	var init = function init() {
+	    return new Promise(function (resolve, reject) {
+	        openDataBase().then(function () {
+	            resolve();
+	        }, function (error) {
+	            console.error(error);
+	        });
+	    });
+	};
+
+	var addNote = function addNote(note) {
+	    if (!note) note = {};
+	    return new Promise(function (resolve, reject) {
+	        var now = Date.parse(new Date()) / 1000;
+	        var request = getObjectStore('notes', 1).add({
+	            title: note.title || '',
+	            content: note.content || '',
+	            url: '',
+	            list: '',
+	            topic: note.topic || '',
+	            tag: note.tag || '',
+	            color: note.color || '',
+	            created: now,
+	            updated: now,
+	            user_id: 0
+	        });
+
+	        request.onsucess = function (event) {
+	            resolve(event.target.result);
+	        };
+
+	        request.onerror = function (error) {
+	            reject('add note error :' + error.message);
+	        };
+	    });
+	};
+
+	var getAllNotes = function getAllNotes() {
+	    return new Promise(function (resolve, reject) {
+	        var data = [];
+	        var request = getObjectStore('notes', 0).openCursor();
+	        request.onsuccess = function (event) {
+	            var cursor = event.target.result;
+	            if (cursor) {
+	                data.push(cursor.value);
+	                cursor['continue']();
+	            } else {
+	                resolve(data);
+	            }
+	        };
+
+	        request.onerror = function (error) {
+	            reject('get All data error :' + error.message);
+	        };
+	    });
+	};
+
+	exports['default'] = {
+	    init: init,
+	    addNote: addNote,
+	    getAllNotes: getAllNotes
+	};
+	module.exports = exports['default'];
+
+/***/ },
+/* 176 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
-	 * Created by Yixi on 7/14/15.
+	 * Created by Yixi on 7/15/15.
 	 */
 
 	'use strict';
@@ -18893,28 +19104,275 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _react = __webpack_require__(2);
+	var _keymirror = __webpack_require__(177);
 
-	var _react2 = _interopRequireDefault(_react);
+	var _keymirror2 = _interopRequireDefault(_keymirror);
 
-	var _NoteContentJs = __webpack_require__(173);
+	var _objectAssign = __webpack_require__(161);
 
-	var _NoteContentJs2 = _interopRequireDefault(_NoteContentJs);
+	var _objectAssign2 = _interopRequireDefault(_objectAssign);
 
-	var DisplayNote = _react2['default'].createClass({
-	    displayName: 'DisplayNote',
+	exports['default'] = (0, _objectAssign2['default'])({}, {}, (0, _keymirror2['default'])({
+	    NOTE_STORE_CHANGE: null
+	}));
+	module.exports = exports['default'];
 
-	    render: function render() {
-	        return _react2['default'].createElement(
-	            'div',
-	            { className: 'displayNote' },
-	            'note title',
-	            _react2['default'].createElement(_NoteContentJs2['default'], null)
-	        );
+/***/ },
+/* 177 */
+/***/ function(module, exports) {
+
+	/**
+	 * Copyright 2013-2014 Facebook, Inc.
+	 *
+	 * Licensed under the Apache License, Version 2.0 (the "License");
+	 * you may not use this file except in compliance with the License.
+	 * You may obtain a copy of the License at
+	 *
+	 * http://www.apache.org/licenses/LICENSE-2.0
+	 *
+	 * Unless required by applicable law or agreed to in writing, software
+	 * distributed under the License is distributed on an "AS IS" BASIS,
+	 * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+	 * See the License for the specific language governing permissions and
+	 * limitations under the License.
+	 *
+	 */
+
+	"use strict";
+
+	/**
+	 * Constructs an enumeration with keys equal to their value.
+	 *
+	 * For example:
+	 *
+	 *   var COLORS = keyMirror({blue: null, red: null});
+	 *   var myColor = COLORS.blue;
+	 *   var isColorValid = !!COLORS[myColor];
+	 *
+	 * The last line could not be performed if the values of the generated enum were
+	 * not equal to their keys.
+	 *
+	 *   Input:  {key1: val1, key2: val2}
+	 *   Output: {key1: key1, key2: key2}
+	 *
+	 * @param {object} obj
+	 * @return {object}
+	 */
+	var keyMirror = function keyMirror(obj) {
+	  var ret = {};
+	  var key;
+	  if (!(obj instanceof Object && !Array.isArray(obj))) {
+	    throw new Error("keyMirror(...): Argument must be an object.");
+	  }
+	  for (key in obj) {
+	    if (!obj.hasOwnProperty(key)) {
+	      continue;
 	    }
+	    ret[key] = key;
+	  }
+	  return ret;
+	};
+
+	module.exports = keyMirror;
+
+/***/ },
+/* 178 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Created by Yixi on 7/15/15.
+	 */
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
 	});
 
-	exports['default'] = DisplayNote;
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	var _DispatcherJs = __webpack_require__(179);
+
+	var _DispatcherJs2 = _interopRequireDefault(_DispatcherJs);
+
+	exports['default'] = new _DispatcherJs2['default']();
+	module.exports = exports['default'];
+
+/***/ },
+/* 179 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Created by Yixi on 7/15/15.
+	 */
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+	var _objectAssign = __webpack_require__(161);
+
+	var _objectAssign2 = _interopRequireDefault(_objectAssign);
+
+	var invariant = function invariant(condition, format, a, b, c, d, e, f) {
+	    if (!condition) {
+	        var error;
+	        if (format === undefined) {
+	            error = new Error('Minified exception occurred; use the non-minified dev environment ' + 'for the full error message and additional helpful warnings.');
+	        } else {
+	            var args = [a, b, c, d, e, f];
+	            var argIndex = 0;
+	            error = new Error('Invariant Violation: ' + format.replace(/%s/g, function () {
+	                return args[argIndex++];
+	            }));
+	        }
+
+	        error.framesToPop = 1; // we don't care about invariant's own frame
+	        throw error;
+	    }
+	};
+
+	var _prefix = 'ID_';
+
+	//var Dispatcher = function(){};
+
+	//Dispatcher.prototype = assign({},Dispatcher.prototype,{
+	var Dispatcher = (function () {
+	    function Dispatcher() {
+	        _classCallCheck(this, Dispatcher);
+
+	        this._lastId = 1;
+	        this._callbacks = {};
+	        this._isPending = {};
+	        this._isHandled = {};
+	        this._isDispatching = false;
+	        this._pendingPayload = null;
+	    }
+
+	    _createClass(Dispatcher, [{
+	        key: 'register',
+
+	        /**
+	         * registers a callback to be invoked every dispatched payload.
+	         */
+	        value: function register(callback) {
+	            var id = _prefix + this._lastId++;
+	            this._callbacks[id] = callback;
+	            return id;
+	        }
+	    }, {
+	        key: 'unregister',
+	        value: function unregister(id) {
+	            invariant(this._callbacks[id], 'Dispatcher.unregister(...): `%s` does not map to a registered callback.', id);
+	            delete this._callbacks[id];
+	        }
+	    }, {
+	        key: 'waitFor',
+
+	        /**
+	         * Waits for the callbacks specified to be invoked before continuing execution
+	         * of the current callback. This method should only be used by a callback in
+	         * response to a dispatched payload.
+	         *
+	         * @param {array} ids
+	         */
+	        value: function waitFor(ids) {
+	            invariant(this._isDispatching, 'Dispatcher.waitFor(...): Must be invoked while dispatching.');
+
+	            for (var ii = 0; ii < ids.length; ii++) {
+	                var id = ids[ii];
+	                if (this._isPending[id]) {
+	                    invariant(this._isHandled[id], 'Dispatcher.waitFor(...): Circular dependency detected while ' + 'waiting for `%s`.', id);
+	                    continue;
+	                }
+	                invariant(this._callbacks[id], 'Dispatcher.waitFor(...): `%s` does not map to a registered callback.', id);
+
+	                this._invokeCallback(id);
+	            }
+	        }
+	    }, {
+	        key: 'dispatch',
+
+	        /**
+	         * Dispatches a payload to all registered callbacks.
+	         *
+	         * @param {object} payload
+	         */
+	        value: function dispatch(payload) {
+	            invariant(!this._isDispatching, 'Dispatch.dispatch(...): Cannot dispatch in the middle of a dispatch.');
+	            this._startDispatching(payload);
+	            try {
+	                for (var id in this._callbacks) {
+	                    if (this._isPending[id]) {
+	                        continue;
+	                    }
+	                    this._invokeCallback(id);
+	                }
+	            } finally {
+	                this._stopDispatching();
+	            }
+	        }
+	    }, {
+	        key: 'isDispatching',
+
+	        /**
+	         * Is this Dispatcher currently dispatching.
+	         *
+	         * @return {boolean}
+	         */
+	        value: function isDispatching() {
+	            return this._isDispatching;
+	        }
+	    }, {
+	        key: '_invokeCallback',
+	        value: function _invokeCallback(id) {
+	            this._isPending[id] = true;
+	            this._callbacks[id](this._pendingPayload);
+	            this._isHandled[id] = true;
+	        }
+	    }, {
+	        key: '_startDispatching',
+
+	        /**
+	         * Set up bookkeeping needed when dispatching.
+	         *
+	         * @param {object} payload
+	         * @internal
+	         */
+	        value: function _startDispatching(payload) {
+	            for (var id in this._callbacks) {
+	                this._isPending[id] = false;
+	                this._isHandled[id] = false;
+	            }
+	            this._pendingPayload = payload;
+	            this._isDispatching = true;
+	        }
+	    }, {
+	        key: '_stopDispatching',
+
+	        /**
+	         * Clear bookkeeping used for dispatching.
+	         *
+	         * @internal
+	         */
+	        value: function _stopDispatching() {
+	            this._pendingPayload = null;
+	            this._isDispatching = false;
+	        }
+	    }]);
+
+	    return Dispatcher;
+	})();
+
+	exports['default'] = Dispatcher;
 	module.exports = exports['default'];
 
 /***/ }
