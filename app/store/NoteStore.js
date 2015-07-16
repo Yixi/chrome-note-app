@@ -68,6 +68,14 @@ var NoteStore = objectAssign({},EventEmitter.prototype,{
         return Notes;
     },
 
+    getNoteAsync(id){
+        return DB.getNote(id);
+    },
+
+    updateNote(note){
+        DB.updateNote(note);
+    },
+
     emitChange(){
         this.emit(NOTE.NOTE_STORE_CHANGE);
     },

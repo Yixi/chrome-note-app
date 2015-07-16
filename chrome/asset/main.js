@@ -18241,11 +18241,11 @@
 
 	var _DisplayNoteJs2 = _interopRequireDefault(_DisplayNoteJs);
 
-	var _AddButtonJs = __webpack_require__(180);
+	var _AddButtonJs = __webpack_require__(178);
 
 	var _AddButtonJs2 = _interopRequireDefault(_AddButtonJs);
 
-	__webpack_require__(178);
+	__webpack_require__(182);
 
 	var MainApp = _react2['default'].createClass({
 	    displayName: 'MainApp',
@@ -18257,7 +18257,6 @@
 	    },
 
 	    _onNoteSelectChange: function _onNoteSelectChange(id) {
-	        console.log(id);
 	        this.setState({ selectNoteId: id });
 	    },
 
@@ -18456,6 +18455,14 @@
 	            loadNotes();
 	        }
 	        return Notes;
+	    },
+
+	    getNoteAsync: function getNoteAsync(id) {
+	        return _libsDBJs2['default'].getNote(id);
+	    },
+
+	    updateNote: function updateNote(note) {
+	        _libsDBJs2['default'].updateNote(note);
 	    },
 
 	    emitChange: function emitChange() {
@@ -18796,7 +18803,7 @@
 
 /***/ },
 /* 163 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
 	/**
 	 * Created by Yixi on 7/15/15.
@@ -18815,6 +18822,13 @@
 	Object.defineProperty(exports, '__esModule', {
 	    value: true
 	});
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	var _objectAssign = __webpack_require__(161);
+
+	var _objectAssign2 = _interopRequireDefault(_objectAssign);
+
 	var DB;
 
 	var getObjectStore = function getObjectStore(name, mode) {
@@ -18917,10 +18931,29 @@
 	    });
 	};
 
+	var updateNote = function updateNote(note) {
+	    return new Promise(function (resolve, reject) {
+	        getNote(note.id).then(function (oldNote) {
+	            var newNote = (0, _objectAssign2['default'])({}, oldNote, note);
+	            var request = getObjectStore('notes', 1).put(newNote);
+
+	            request.onsuccess = function (event) {
+	                resolve();
+	            };
+
+	            request.onerror = function (error) {
+	                reject(error);
+	            };
+	        });
+	    });
+	};
+
 	exports['default'] = {
 	    init: init,
 	    addNote: addNote,
-	    getAllNotes: getAllNotes
+	    getAllNotes: getAllNotes,
+	    getNote: getNote,
+	    updateNote: updateNote
 	};
 	module.exports = exports['default'];
 
@@ -19260,7 +19293,7 @@
 
 	            return _react2['default'].createElement(
 	                'div',
-	                { className: itemClass, key: i, onClick: _this.props.onNoteSelectChange.bind(null, item.id) },
+	                { className: itemClass, key: item.id, onClick: _this.props.onNoteSelectChange.bind(null, item.id) },
 	                _react2['default'].createElement('div', { className: 'point' }),
 	                _react2['default'].createElement(
 	                    'div',
@@ -19378,15 +19411,48 @@
 
 	var _NoteContentJs2 = _interopRequireDefault(_NoteContentJs);
 
+	var _storeNoteStoreJs = __webpack_require__(160);
+
+	var _storeNoteStoreJs2 = _interopRequireDefault(_storeNoteStoreJs);
+
 	var DisplayNote = _react2['default'].createClass({
 	    displayName: 'DisplayNote',
+
+	    getInitialState: function getInitialState() {
+	        return {
+	            noteId: '',
+	            noteContent: ''
+	        };
+	    },
+
+	    componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
+	        var _this = this;
+
+	        var nextFocusId = nextProps.focusId;
+	        _storeNoteStoreJs2['default'].getNoteAsync(nextFocusId).then(function (note) {
+
+	            console.log(note);
+	            _this.setState({
+	                noteContent: note.content,
+	                noteId: note.id
+	            });
+	        });
+	    },
+
+	    onNoteContentChange: function onNoteContentChange(content) {
+	        _storeNoteStoreJs2['default'].updateNote({
+	            id: this.state.noteId,
+	            content: content
+	        });
+	    },
 
 	    render: function render() {
 	        return _react2['default'].createElement(
 	            'div',
 	            { className: 'displayNote' },
-	            'note title',
-	            _react2['default'].createElement(_NoteContentJs2['default'], null)
+	            'note title ',
+	            this.state.noteId,
+	            _react2['default'].createElement(_NoteContentJs2['default'], { content: this.state.noteContent, noteId: this.state.noteId, onChange: this.onNoteContentChange })
 	        );
 	    }
 	});
@@ -19414,15 +19480,55 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	__webpack_require__(184);
+
 	var NoteContent = _react2['default'].createClass({
 	    displayName: 'NoteContent',
 
+	    getInitialState: function getInitialState() {
+	        return {
+	            noteContent: this.props.content,
+	            noteId: this.props.noteId
+	        };
+	    },
+
+	    _buildEditor: function _buildEditor() {
+	        var options = {
+	            editor: _react2['default'].findDOMNode(this.refs.noteContent),
+	            list: ['blockquote', 'p', 'insertorderedlist', 'insertunorderedlist', 'indent', 'outdent', 'bold', 'italic', 'createlink'] // editor menu list
+	        };
+
+	        var editor = new Pen(options);
+	    },
+
+	    componentDidMount: function componentDidMount() {
+	        this._buildEditor();
+	    },
+
+	    componentDidUpdate: function componentDidUpdate() {
+	        this._buildEditor();
+	    },
+
+	    componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
+	        this.setState({
+	            noteContent: nextProps.content,
+	            noteId: nextProps.noteId
+	        });
+	    },
+
+	    onInput: function onInput(event) {
+	        var _this = this;
+
+	        clearTimeout(this.Timer);
+	        this.Timer = setTimeout(function () {
+	            _this.props.onChange(_react2['default'].findDOMNode(_this.refs.noteContent).innerHTML);
+	        }, 20);
+	    },
+
 	    render: function render() {
-	        return _react2['default'].createElement(
-	            'div',
-	            { className: 'noteContent' },
-	            'Note content'
-	        );
+	        return _react2['default'].createElement('div', { key: this.state.noteId, className: 'noteContent', ref: 'noteContent', onInput: this.onInput,
+	            dangerouslySetInnerHTML: { __html: this.state.noteContent }
+	        });
 	    }
 	});
 
@@ -19431,13 +19537,6 @@
 
 /***/ },
 /* 178 */
-/***/ function(module, exports) {
-
-	// removed by extract-text-webpack-plugin
-
-/***/ },
-/* 179 */,
-/* 180 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -19455,11 +19554,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _libsNoteActionCreatorsJs = __webpack_require__(183);
+	var _libsNoteActionCreatorsJs = __webpack_require__(179);
 
 	var _libsNoteActionCreatorsJs2 = _interopRequireDefault(_libsNoteActionCreatorsJs);
 
-	__webpack_require__(181);
+	__webpack_require__(180);
 
 	var AddButton = _react2['default'].createClass({
 	    displayName: 'AddButton',
@@ -19481,14 +19580,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 181 */
-/***/ function(module, exports) {
-
-	// removed by extract-text-webpack-plugin
-
-/***/ },
-/* 182 */,
-/* 183 */
+/* 179 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -19519,6 +19611,26 @@
 	    }
 	};
 	module.exports = exports['default'];
+
+/***/ },
+/* 180 */
+/***/ function(module, exports) {
+
+	// removed by extract-text-webpack-plugin
+
+/***/ },
+/* 181 */,
+/* 182 */
+/***/ function(module, exports) {
+
+	// removed by extract-text-webpack-plugin
+
+/***/ },
+/* 183 */,
+/* 184 */
+/***/ function(module, exports) {
+
+	// removed by extract-text-webpack-plugin
 
 /***/ }
 /******/ ]);

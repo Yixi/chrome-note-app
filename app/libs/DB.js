@@ -12,6 +12,8 @@
 
 'use strict';
 
+import assign from 'object-assign';
+
 var DB;
 
 var getObjectStore = (name,mode) => {
@@ -119,10 +121,31 @@ var getNote = (id) => {
     });
 };
 
+var updateNote = (note) =>{
+    return new Promise( (resolve, reject) => {
+        getNote(note.id).then( (oldNote) => {
+            var newNote = assign({},oldNote,note);
+            var request = getObjectStore('notes',1).put(newNote);
+
+            request.onsuccess = (event) => {
+                resolve();
+            };
+
+            request.onerror = (error) => {
+                reject(error);
+            }
+        });
+
+
+    });
+};
+
 export default {
     init:init,
     addNote:addNote,
-    getAllNotes:getAllNotes
+    getAllNotes:getAllNotes,
+    getNote:getNote,
+    updateNote:updateNote
 };
 
 

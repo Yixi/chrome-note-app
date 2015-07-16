@@ -89,6 +89,14 @@
   top: 50%;
   margin-top: -3px;
 }
+.noteContent {
+  position: absolute;
+  top: 40px;
+  left: 50px;
+  right: 50px;
+  bottom: 10px;
+  cursor: text;
+}
 #AddButton {
   position: fixed;
   width: 100px;

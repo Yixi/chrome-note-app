@@ -21,7 +21,6 @@ var MainApp  = React.createClass({
     },
 
     _onNoteSelectChange(id){
-        console.log(id);
         this.setState({selectNoteId:id});
     },
 

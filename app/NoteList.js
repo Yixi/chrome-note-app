@@ -27,7 +27,7 @@ var NoteList = React.createClass({
             });
 
             return (
-                <div className={itemClass} key={i} onClick={this.props.onNoteSelectChange.bind(null,item.id)}>
+                <div className={itemClass} key={item.id} onClick={this.props.onNoteSelectChange.bind(null,item.id)}>
                     <div className="point"></div>
                     <div className="content">
                         <div className="header">{item.title}</div>
