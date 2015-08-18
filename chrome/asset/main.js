@@ -18241,11 +18241,11 @@
 
 	var _DisplayNoteJs2 = _interopRequireDefault(_DisplayNoteJs);
 
-	var _AddButtonJs = __webpack_require__(178);
+	var _AddButtonJs = __webpack_require__(180);
 
 	var _AddButtonJs2 = _interopRequireDefault(_AddButtonJs);
 
-	__webpack_require__(182);
+	__webpack_require__(184);
 
 	var MainApp = _react2['default'].createClass({
 	    displayName: 'MainApp',
@@ -19480,17 +19480,17 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	__webpack_require__(184);
+	__webpack_require__(178);
 
 	var NoteContent = _react2['default'].createClass({
 	    displayName: 'NoteContent',
 
-	    getInitialState: function getInitialState() {
-	        return {
-	            noteContent: this.props.content,
-	            noteId: this.props.noteId
-	        };
-	    },
+	    // getInitialState(){
+	    //     return {
+	    //         noteContent:this.props.content,
+	    //         noteId:this.props.noteId
+	    //     }
+	    // },
 
 	    _buildEditor: function _buildEditor() {
 	        var options = {
@@ -19509,12 +19509,12 @@
 	        this._buildEditor();
 	    },
 
-	    componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
-	        this.setState({
-	            noteContent: nextProps.content,
-	            noteId: nextProps.noteId
-	        });
-	    },
+	    // componentWillReceiveProps(nextProps){
+	    //     this.setState({
+	    //         noteContent:nextProps.content,
+	    //         noteId:nextProps.noteId
+	    //     })
+	    // },
 
 	    onInput: function onInput(event) {
 	        var _this = this;
@@ -19526,8 +19526,8 @@
 	    },
 
 	    render: function render() {
-	        return _react2['default'].createElement('div', { key: this.state.noteId, className: 'noteContent', ref: 'noteContent', onInput: this.onInput,
-	            dangerouslySetInnerHTML: { __html: this.state.noteContent }
+	        return _react2['default'].createElement('div', { className: 'noteContent', ref: 'noteContent', onInput: this.onInput,
+	            dangerouslySetInnerHTML: { __html: this.props.content }
 	        });
 	    }
 	});
@@ -19537,6 +19537,13 @@
 
 /***/ },
 /* 178 */
+/***/ function(module, exports) {
+
+	// removed by extract-text-webpack-plugin
+
+/***/ },
+/* 179 */,
+/* 180 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -19554,11 +19561,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _libsNoteActionCreatorsJs = __webpack_require__(179);
+	var _libsNoteActionCreatorsJs = __webpack_require__(181);
 
 	var _libsNoteActionCreatorsJs2 = _interopRequireDefault(_libsNoteActionCreatorsJs);
 
-	__webpack_require__(180);
+	__webpack_require__(182);
 
 	var AddButton = _react2['default'].createClass({
 	    displayName: 'AddButton',
@@ -19580,7 +19587,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 179 */
+/* 181 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -19613,13 +19620,6 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 180 */
-/***/ function(module, exports) {
-
-	// removed by extract-text-webpack-plugin
-
-/***/ },
-/* 181 */,
 /* 182 */
 /***/ function(module, exports) {
 
