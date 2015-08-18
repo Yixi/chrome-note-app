@@ -10,12 +10,12 @@ import React from 'react';
 
 var NoteContent = React.createClass({
 
-    getInitialState(){
-        return {
-            noteContent:this.props.content,
-            noteId:this.props.noteId
-        }
-    },
+    // getInitialState(){
+    //     return {
+    //         noteContent:this.props.content,
+    //         noteId:this.props.noteId
+    //     }
+    // },
 
     _buildEditor(){
         var options = {
@@ -35,12 +35,12 @@ var NoteContent = React.createClass({
         this._buildEditor();
     },
 
-    componentWillReceiveProps(nextProps){
-        this.setState({
-            noteContent:nextProps.content,
-            noteId:nextProps.noteId
-        })
-    },
+    // componentWillReceiveProps(nextProps){
+    //     this.setState({
+    //         noteContent:nextProps.content,
+    //         noteId:nextProps.noteId
+    //     })
+    // },
 
     onInput(event){
         clearTimeout(this.Timer);
@@ -51,8 +51,8 @@ var NoteContent = React.createClass({
 
     render(){
         return (
-            <div key={this.state.noteId} className="noteContent" ref="noteContent" onInput={this.onInput}
-                dangerouslySetInnerHTML = {{__html:this.state.noteContent}}
+            <div  className="noteContent" ref="noteContent" onInput={this.onInput}
+                dangerouslySetInnerHTML = {{__html:this.props.content}}
                 >
             </div>
         );
